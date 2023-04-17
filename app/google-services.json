@@ -1,0 +1,40 @@
+{
+	
+  "project_info": {
+    "project_number": "186030156209",
+    "project_id": "vpreventorfyp",
+    "storage_bucket": "vpreventorfyp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:186030156209:android:ffeac2830f0f6c65c07590",
+        "android_client_info": {
+          "package_name": "com.fypvpreventor.VpreventorFYP"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "186030156209-fuitcloc0l9c8c4k2a1qkhek8j5a66hc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHqndioQ5lzdfE0e_CFbuewEpJAd87mbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "186030156209-fuitcloc0l9c8c4k2a1qkhek8j5a66hc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
