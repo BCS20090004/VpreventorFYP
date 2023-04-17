@@ -2,12 +2,14 @@ package com.fypvpreventor.VpreventorFYP
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.fypvpreventor.VpreventorFYP.databinding.ActivityMainBinding
+import com.fypvpreventor.fypvpreventor.viewmodels.RecordingController
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,8 +37,9 @@ class MainActivity : AppCompatActivity() {
 //            val intent = Intent(applicationContext,SensorActivity::class.java)
 //            startActivity(intent)
             navHostFragment.findNavController().navigate(R.id.sensorFragment)
+            //navController.navigate(R.id.sensorFragment)
+
         }
     }
-
 
 }

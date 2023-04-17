@@ -70,6 +70,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback{
        googleMap.addMarker(markerOptions)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode){

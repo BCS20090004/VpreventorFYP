@@ -1,32 +1,53 @@
 package com.fypvpreventor.VpreventorFYP;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.fypvpreventor.VpreventorFYP.databinding.PlayerSheetBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class audiolist extends Fragment implements  AudioListAdapter.onItemListClick{
+public class audiolist extends Fragment implements  AudioListAdapter.onItemListClick {
+    private static final int AUDIO = 1;
+    private Button musicBtn;
+    private TextView uriTxt, dwnTxt;
+    private StorageReference mStorage;
+    private Uri uri;
 
     private ConstraintLayout playerSheet;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -38,27 +59,96 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
     private MediaPlayer mediaPlayer =null;
     private boolean isPlaying = false;
 
-    private File filetoPlay;
+    private File filetoPlay=null;
 
     //UI
     private ImageButton playBtn;
+    private ImageButton UploadBtn;
+
     private TextView playerHeader;
     private TextView playerFilename;
 
     private SeekBar playerSeekbar;
     private Handler seekbarHandler;
     private Runnable updateSeekbar;
-
     private AudioListAdapter audioListAdapter;
-    public audiolist() {
-        // Required empty public constructor
-    }
-
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private String currentUserName;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_audiolist, container, false);
+        View view = inflater.inflate(R.layout.fragment_audiolist, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            currentUserName = currentUser.getDisplayName();
+        }
+
+        // Get database reference
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("audio");
+
+        initStorageReference();
+        // Initialize mStorage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        mStorage = storage.getReference();
+
+        // check if sound effects are enabled
+        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null && audioManager.getMode() == AudioManager.MODE_NORMAL) {
+            Log.d("SoundEffects", "Sound effects are not enabled");
+        }
+
+        return view;
+    }
+    private void initStorageReference() {
+        mStorage = FirebaseStorage.getInstance().getReference("Uploads/users/" + currentUserName);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AUDIO) {
+                uri = data.getData();
+                upload(uri);
+            }
+        }
+    }
+
+
+    public void upload(Uri uri) {
+        if (uri != null) {
+            StorageReference userAudioRef = mStorage.child(uri.getLastPathSegment());
+            try {
+                userAudioRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        userAudioRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri url) {
+                                Toast.makeText(getContext(), "Successfully Uploaded :)", Toast.LENGTH_LONG).show();
+                                // Add audio URI to database
+                                addAudioToDatabase(url.toString());
+                            }
+                        });
+                    }
+                });
+            } catch (Exception e) {
+                Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void addAudioToDatabase(String audioUri) {
+        // Create a new node with audio file name and current user's full name
+        String audioName = uri.getLastPathSegment();
+        String audioNodeName = currentUserName + "_" + audioName;
+
+        // Add audio URI to node
+        mDatabase.child(audioNodeName).child("uri").setValue(audioUri);
     }
 
     public void onViewCreated(@NonNull View view, @NonNull Bundle savedInstanceState) {
@@ -68,9 +158,9 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         bottomSheetBehavior = BottomSheetBehavior.from(playerSheet);
         audioList = view.findViewById(R.id.audio_list_view);
 
-        playBtn=view.findViewById(R.id.player_play_btn);
-        playerHeader=view.findViewById(R.id.player_header_title);
-        playerFilename=view.findViewById(R.id.player_filename);
+        playBtn = view.findViewById(R.id.player_play_btn);
+        playerHeader = view.findViewById(R.id.player_header_title);
+        playerFilename = view.findViewById(R.id.player_filename);
 
         playerSeekbar = view.findViewById(R.id.player_seekbar);
 
@@ -78,12 +168,11 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         File directory = new File(path);
         allFiles = directory.listFiles();
 
-        audioListAdapter=new AudioListAdapter(allFiles,this);
+        audioListAdapter = new AudioListAdapter(allFiles, this);
 
         audioList.setHasFixedSize(true);
         audioList.setLayoutManager(new LinearLayoutManager(getContext()));
         audioList.setAdapter(audioListAdapter);
-
 
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -100,10 +189,10 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isPlaying){
+                if (isPlaying) {
                     pauseAudio();
                 } else {
-                    if(filetoPlay == null){
+                    if (filetoPlay != null) {
                         resumeAudio();
                     }
                 }
@@ -126,20 +215,47 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
                 int progress = seekBar.getProgress();
                 mediaPlayer.seekTo(progress);
                 resumeAudio();
-
             }
         });
 
+
+        playerSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                pauseAudio();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int progress = seekBar.getProgress();
+                mediaPlayer.seekTo(progress);
+                resumeAudio();
+            }
+        });
     }
 
     @Override
     public void onClickListener(File file, int position) {
         filetoPlay = file;
-        if(isPlaying){
+        if (isPlaying) {
             stopAudio();
             playAudio(filetoPlay);
-        }else {
+        } else {
             playAudio(filetoPlay);
+        }
+    }
+
+   private String getUserFullName() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            return currentUser.getDisplayName();
+        } else {
+            return null;
         }
     }
 
@@ -150,26 +266,43 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         seekbarHandler.removeCallbacks(updateSeekbar);
     }
 
-    private void resumeAudio(){
+    private void resumeAudio() {
         mediaPlayer.start();
-        playBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.player_play_btn,null));
-        isPlaying=true;
-
-        updateRunnable();
-        seekbarHandler.postDelayed(updateSeekbar,500);
+        playBtn.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.pause_button));
+        isPlaying = true;
+        updateSeekbar = new Runnable() {
+            @Override
+            public void run() {
+                if (mediaPlayer != null) {
+                    playerSeekbar.setProgress(mediaPlayer.getCurrentPosition());
+                    seekbarHandler.postDelayed(this, 500);
+                }
+            }
+        };
+        seekbarHandler.postDelayed(updateSeekbar, 500);
     }
 
+
     private void stopAudio() {
-        //stop audio
-        playBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.player_play_btn,null));
-        playerHeader.setText("Stopped");
-        isPlaying=false;
-        seekbarHandler.removeCallbacks(updateSeekbar);
+        if (mediaPlayer != null) {
+            // stop audio
+            playBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.player_play_btn, null));
+            playerHeader.setText("Stopped");
+            isPlaying = false;
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer = null;
+            if (seekbarHandler != null) {
+                seekbarHandler.removeCallbacks(updateSeekbar);
+            }
+        }
     }
 
     private void playAudio(File filetoPlay) {
         //play audio
         mediaPlayer = new MediaPlayer();
+
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         try {
             mediaPlayer.setDataSource(filetoPlay.getAbsolutePath());
@@ -198,8 +331,7 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         seekbarHandler = new Handler();
         updateRunnable();
         seekbarHandler.postDelayed(updateSeekbar,0);
-
-}
+    }
 
     private void updateRunnable() {
         updateSeekbar = new Runnable() {
@@ -214,8 +346,9 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
     @Override
     public void onStop() {
         super.onStop();
-
-        stopAudio();
+        if (isPlaying) {
+            stopAudio();
+        }
     }
-}
 
+}

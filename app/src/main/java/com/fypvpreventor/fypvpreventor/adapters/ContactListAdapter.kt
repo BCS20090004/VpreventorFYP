@@ -50,5 +50,4 @@ class ContactListAdapter (private val onItemClicked: (Contacts) -> Unit) :
             }
         }
     }
-
 }

@@ -9,12 +9,12 @@
         android:icon="@drawable/ic_contact"/>
     <item android:id="@+id/placeholder"
         android:title=""/>
-    <item android:id="@+id/locationFragment"
-        android:title="Location"
-        android:icon="@drawable/ic_map"/>
+    <item android:id="@+id/fakeCall"
+        android:title="FakeCall"
+        android:icon="@drawable/icons8_phonelink_ring_64"/>
     <item android:id="@+id/record"
         android:title="Record"
-        android:icon="@drawable/ic_settings"/>
+        android:icon="@drawable/icons8_microphone_64"/>
 
 
 </menu>

@@ -48,9 +48,7 @@ public class Record extends Fragment implements View.OnClickListener {
     private String recordPermission = Manifest.permission.RECORD_AUDIO;
 
     private TextView fileName;
-    public Record (){
 
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,11 +85,13 @@ public class Record extends Fragment implements View.OnClickListener {
                             isRecording = false;
                         }
                     });
+                    alertDialog.setNegativeButton("CANCEL",null);
                     alertDialog.setTitle("Audio still recording");
                     alertDialog.setMessage("Are you sure, you want to stop recording?");
                     alertDialog.create().show();
-                }else {}
+                }else {
 
+                }
                 navController.navigate(R.id.action_record_to_audiolist);
                 break;
 

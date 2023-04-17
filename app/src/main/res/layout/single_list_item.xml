@@ -13,6 +13,7 @@
         android:layout_width="48dp"
         android:layout_height="43dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/play_button" />
@@ -21,18 +22,46 @@
         android:id="@+id/list_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="4dp"
         android:text="TextView"
+        android:maxWidth="160dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/list_image_view"
-        app:layout_constraintStart_toEndOf="@+id/list_image_view" />
+        app:layout_constraintStart_toEndOf="@+id/list_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/list_date" />
 
     <TextView
         android:id="@+id/list_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="10dp"
         android:text="TextView"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/list_title"
         app:layout_constraintStart_toEndOf="@+id/list_image_view"
-        app:layout_constraintTop_toTopOf="@+id/list_image_view" />
+        app:layout_constraintTop_toTopOf="@+id/list_image_view"
+        app:layout_constraintVertical_bias="0.2" />
+
+    <ImageView
+        android:id="@+id/sendemail"
+        android:layout_width="42dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/emailicon" />
+
+    <ImageView
+        android:id="@+id/share"
+        android:layout_width="55dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sendemail"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/whatsappiconn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

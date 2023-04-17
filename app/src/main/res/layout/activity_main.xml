@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
+    android:background="@color/black"
     tools:context=".MainActivity"
     android:fitsSystemWindows="true">
 
@@ -22,14 +22,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fabCradleMargin="10dp"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/teal_500">
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_View"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             app:menu="@menu/bottom_navigation_menu"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
@@ -37,9 +40,10 @@
         android:id="@+id/fab_bottom"
         android:layout_width="wrap_content"
         android:layout_height="83dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/teal_700"
         android:src="@drawable/ic_action_name"
         android:scaleType="fitCenter"
         app:layout_anchor="@id/bottom_app_bar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

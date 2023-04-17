@@ -1,9 +1,17 @@
 package com.fypvpreventor.VpreventorFYP.viewmodels
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.*
 import com.fypvpreventor.VpreventorFYP.database.ContactDao
 import com.fypvpreventor.VpreventorFYP.database.Contacts
 import kotlinx.coroutines.launch
+import java.io.File
 
 class ContactsViewModel(private val contactsDao : ContactDao) : ViewModel() {
 
@@ -66,7 +74,8 @@ class ContactsViewModel(private val contactsDao : ContactDao) : ViewModel() {
 
 // factory, that will instantiate view model objects for you.
 class ContactsViewModelFactory( private val contactsDao: ContactDao) : ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        //override fun <T : ViewModel?> create(modelClass: Class<T>): T
        if(modelClass.isAssignableFrom(ContactsViewModel::class.java)){
            @Suppress("UNCHECKED_CAST")
            return ContactsViewModel(contactsDao) as T

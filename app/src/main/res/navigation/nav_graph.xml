@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/dashBoardFragment">
+    app:startDestination="@id/sensorFragment">
 
     <fragment
         android:id="@+id/contactsFragment"
@@ -62,5 +62,11 @@
         android:name="com.fypvpreventor.VpreventorFYP.audiolist"
         android:label="fragment_audiolist"
         tools:layout="@layout/fragment_audiolist" />
+
+    <activity
+        android:id="@+id/fakeCall"
+        android:name="com.fypvpreventor.VpreventorFYP.FakeCall"
+        android:label="activity_fake_call"
+        tools:layout="@layout/activity_fake_call" />
 
 </navigation>
