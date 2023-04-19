@@ -110,7 +110,9 @@ class SensorFragment : Fragment() {
             Manifest.permission.SEND_SMS,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
         requestPermissions(permissions, permissionCode)
 
@@ -218,12 +220,10 @@ class SensorFragment : Fragment() {
         task.addOnSuccessListener { location ->
             if (location != null) {
                 currentLocation = location
-                Toast.makeText(
-                    requireContext(), currentLocation.latitude.toString() + "" +
+                /*Toast.makeText(
+                    requireContext(), currentLocation.latitude.toString() + " " +
                             currentLocation.longitude, Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                Toast.makeText(requireContext(), "Current Location failed", Toast.LENGTH_SHORT).show()
+                ).show()*/
             }
         }
     }
@@ -258,6 +258,10 @@ class SensorFragment : Fragment() {
                                 null,
                                 null
                             )
+                            Toast.makeText(requireContext(), "Location Message Sent",Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(requireContext(),"Please open GPS",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

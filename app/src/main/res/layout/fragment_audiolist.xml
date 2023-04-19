@@ -5,11 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".audiolist"
     android:background="@color/dark_grey">
-
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/audio_list_view"
         android:layout_width="match_parent"
         android:layout_height="622dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <include layout="@layout/player_sheet"/>
 

@@ -260,7 +260,7 @@
                 android:id="@+id/materialCardView4"
                 android:layout_width="353dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="26dp"
                 android:backgroundTint="#26FFFFFF"
                 android:padding="5dp"

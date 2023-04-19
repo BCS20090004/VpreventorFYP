@@ -120,15 +120,26 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 
-                                            if(task.isSuccessful()){
-                                                Toast.makeText(Register.this,"User has been registered succesfully!", Toast.LENGTH_LONG).show();
+                                            if (task.isSuccessful()) {
+                                                FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText(Register.this, "Verification email sent to " + mAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
+                                                                } else {
+                                                                    Toast.makeText(Register.this, "Failed to send verification email.", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+                                                        });
+                                                Toast.makeText(Register.this, "User has been registered succesfully!", Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);
-
-                                                //redirect to Login layout
-
-                                            }else{
+                                                Intent intent = new Intent(Register.this, Login.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
                                                 String errorMessage = task.getException().getMessage();
-                                                Toast.makeText(Register.this, "Failed to register1: " + errorMessage, Toast.LENGTH_LONG).show();
+                                                Toast.makeText(Register.this, "Failed to register: " + errorMessage, Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);
                                             }
                                         }

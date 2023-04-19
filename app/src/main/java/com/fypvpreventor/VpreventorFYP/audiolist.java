@@ -1,33 +1,31 @@
 package com.fypvpreventor.VpreventorFYP;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,12 +38,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class audiolist extends Fragment implements  AudioListAdapter.onItemListClick {
     private static final int AUDIO = 1;
-    private Button musicBtn;
-    private TextView uriTxt, dwnTxt;
     private StorageReference mStorage;
     private Uri uri;
 
@@ -63,8 +58,6 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
 
     //UI
     private ImageButton playBtn;
-    private ImageButton UploadBtn;
-
     private TextView playerHeader;
     private TextView playerFilename;
 
@@ -100,9 +93,78 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         if (audioManager != null && audioManager.getMode() == AudioManager.MODE_NORMAL) {
             Log.d("SoundEffects", "Sound effects are not enabled");
         }
+        audioList = view.findViewById(R.id.audio_list_view);
+
+        String path = getActivity().getExternalFilesDir("/").getAbsolutePath();
+        File directory = new File(path);
+        allFiles = directory.listFiles();
+
+        audioListAdapter = new AudioListAdapter(allFiles, this);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView,
+                                  RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                // not used, since we don't support dragging
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                // Delete the item from the dataset
+                allFiles[position].delete();
+                allFiles = directory.listFiles();
+                audioListAdapter.notifyDataSetChanged();
+                // Show a toast message to the user
+                Toast.makeText(getContext(), "Audio deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(audioList);
+
+        audioList.setHasFixedSize(true);
+        audioList.setLayoutManager(new LinearLayoutManager(getContext()));
+        audioList.setAdapter(audioListAdapter);
+
+        playerSheet = view.findViewById(R.id.player_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(playerSheet);
+
+        playBtn = view.findViewById(R.id.player_play_btn);
+        playerHeader = view.findViewById(R.id.player_header_title);
+        playerFilename = view.findViewById(R.id.player_filename);
+
+        playerSeekbar = view.findViewById(R.id.player_seekbar);
+
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) ;
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh the audio list
+                String path = getActivity().getExternalFilesDir("/").getAbsolutePath();
+                File directory = new File(path);
+                allFiles = directory.listFiles();
+                audioListAdapter = new AudioListAdapter(allFiles, audiolist.this);
+                audioList.setAdapter(audioListAdapter);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         return view;
     }
+
     private void initStorageReference() {
         mStorage = FirebaseStorage.getInstance().getReference("Uploads/users/" + currentUserName);
     }

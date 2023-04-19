@@ -126,16 +126,6 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.Audi
         }
 
     }
-/*
-    private String getUserFolderName() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            return currentUser.getUid(); // 使用用户ID而不是显示名称
-        } else {
-            return null;
-        }
-    }*/
-
 
     public interface onItemListClick{
         void onClickListener(File file, int position);

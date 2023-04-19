@@ -9,16 +9,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <de.hdodenhof.circleimageview.CircleImageView
 
             android:id="@+id/cont"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_alignStart="@+id/tf1"
+            android:layout_alignEnd="@+id/tf1"
+            android:layout_marginStart="70dp"
             android:layout_marginLeft="155dp"
             android:layout_marginTop="50dp"
-            android:src="@drawable/logo1removebg"
-            >
-        </de.hdodenhof.circleimageview.CircleImageView>
+            android:layout_marginEnd="57dp"
+            android:src="@drawable/logo1removebg"></de.hdodenhof.circleimageview.CircleImageView>
+
         <TextView
             android:id="@+id/tf1"
             android:layout_width="225dp"
@@ -26,10 +30,10 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="98dp"
+            android:layout_marginStart="85dp"
             android:layout_marginLeft="150dp"
-            android:layout_marginTop="205dp"
-            android:layout_marginEnd="86dp"
+            android:layout_marginTop="208dp"
+            android:layout_marginEnd="99dp"
             android:gravity="center"
             android:text="unknown"
             android:textColor="@color/white"
@@ -41,8 +45,9 @@
             android:id="@+id/tf2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="135dp"
+            android:layout_alignParentStart="true"
 
+            android:layout_marginStart="121dp"
             android:layout_marginLeft="140dp"
             android:layout_marginTop="270dp"
             android:gravity="center"
@@ -51,13 +56,18 @@
             android:textSize="20dp">
 
         </TextView>
+
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="176dp"
             android:layout_marginLeft="180dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="185dp"
             android:gravity="center"
             android:text="05:34"
             android:textColor="@color/white"
