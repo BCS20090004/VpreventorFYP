@@ -16,7 +16,7 @@ import android.widget.RemoteViews;
  */
 public class emergency_call extends AppWidgetProvider {
 
-    private static final String PHONE_NUMBER = "+60108089521";
+    private static final String PHONE_NUMBER = "+601120066491";
     private static final int CALL_PHONE_REQUEST_CODE = 123;
 
     @Override
@@ -34,7 +34,7 @@ public class emergency_call extends AppWidgetProvider {
     }
 
     private PendingIntent getPendingIntent(Context context) {
-        Intent intent = new Intent(Intent.ACTION_DIAL); //ACTION_CALL TO CALL DIRECTLY
+        Intent intent = new Intent(Intent.ACTION_CALL); //ACTION_CALL TO CALL DIRECTLY
         intent.setData(Uri.parse("tel:" + PHONE_NUMBER));
         return PendingIntent.getActivity(context, 0, intent, 0);
     }

@@ -13,7 +13,9 @@ class TutorialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
-
+        supportActionBar?.let { actionBar ->
+            actionBar.setDisplayHomeAsUpEnabled(true) // show back button
+        }
         window.setFormat(PixelFormat.UNKNOWN)
 
         //displays a video file
@@ -29,5 +31,10 @@ class TutorialActivity : AppCompatActivity() {
         val mediaController = MediaController(this)
         mVideoView2.setMediaController(mediaController)
         mediaController.setAnchorView(mVideoView2)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

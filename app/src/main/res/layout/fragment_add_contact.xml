@@ -67,10 +67,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/your_message"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/personal_message"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/phone" />
 
@@ -117,14 +119,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="351dp" />
+        app:layout_constraintGuide_begin="335dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="39dp" />
+        app:layout_constraintGuide_begin="31dp" />
 
     <TextView
         android:id="@+id/textView8"

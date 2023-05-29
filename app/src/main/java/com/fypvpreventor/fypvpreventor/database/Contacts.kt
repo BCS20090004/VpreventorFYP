@@ -14,8 +14,8 @@ data class Contacts(
     @NonNull @ColumnInfo(name ="phone_number")
     val phoneNumber : String,
     @ColumnInfo(name = "message")
-    val message : String = "This is an automated warning. I believe there is suspicious activity" +
-            " around me. Please contact me as soon as possible"
+    val message : String = "Pre-set warning: Suspicious activities are suspected, contact me as soon as possible. kindly remove all of the ~ " +
+            "and (#deleteme) to see the whole link."
 )
 //Typically, SQL column names will have words separated by an underscore,
 // as opposed to the lowerCamelCase used by Kotlin properties

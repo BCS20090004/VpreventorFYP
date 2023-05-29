@@ -87,7 +87,7 @@ class SensorFragment : Fragment() {
             ) {
                 // Permission granted, make the call
                 val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:+60108089521") //will change 999
+                callIntent.data = Uri.parse("tel:+601120066491") //will change 999
                 startActivity(callIntent)
             } else {
                 // Permission not granted, request it
@@ -98,7 +98,6 @@ class SensorFragment : Fragment() {
                 )
             }
         }
-
         return view
     }
 
@@ -194,9 +193,11 @@ class SensorFragment : Fragment() {
                     Toast.makeText(requireContext(),"Cant be empty",Toast.LENGTH_SHORT).show()
                 }else{
                     if(TextUtils.isDigitsOnly(myNumber)){
-                        val smsManager : SmsManager = SmsManager.getDefault()
+                        val smsManager: SmsManager = SmsManager.getDefault()
+                        val dividedMessages = smsManager.divideMessage(myMsg)
+                        smsManager.sendMultipartTextMessage(myNumber, null, dividedMessages, null, null)
                         //val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
-                        smsManager.sendTextMessage(myNumber,null,myMsg,null,null)
+                       // smsManager.sendTextMessage(myNumber,null,myMsg,null,null)
                         Toast.makeText(requireContext(), "Message Sent",Toast.LENGTH_SHORT).show()
                     }
                     else{
@@ -247,7 +248,8 @@ class SensorFragment : Fragment() {
                         if (TextUtils.isDigitsOnly(myNumber)) {
                             val smsManager = SmsManager.getDefault()
                             val smsBody = StringBuffer()
-                            smsBody.append("http://maps.google.com?q=")
+                            smsBody.append("ht~tp~:~/~/~ma~ps~.~go~ogle~.~c~o~m~?~q~=~")
+                            smsBody.append("(#deleteme)")
                             smsBody.append(currentLocation.latitude)
                             smsBody.append(",")
                             smsBody.append(currentLocation.longitude)
@@ -268,6 +270,7 @@ class SensorFragment : Fragment() {
             }
         }
     }
+
 
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -304,14 +307,12 @@ class SensorFragment : Fragment() {
         val check = ContextCompat.checkSelfPermission(requireContext(),permission)
         return check == PackageManager.PERMISSION_GRANTED
     }
-
     override fun onResume() {
         sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
             Sensor .TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         )
         super.onResume()
     }
-
     override fun onPause() {
         sensorManager!!.unregisterListener(sensorListener)
         super.onPause()

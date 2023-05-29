@@ -11,8 +11,11 @@ class HelpCenterActivity : AppCompatActivity() {
 
     private lateinit var sliderView: SliderView
     private val images = intArrayOf(
+        R.drawable.page4,
+        R.drawable.page5,
         R.drawable.page1,
         R.drawable.page2,
+        R.drawable.page6,
         R.drawable.page3
     )
 

@@ -48,17 +48,17 @@ class LocationFragment : Fragment(), OnMapReadyCallback{
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)
             return
         }
-   //     val task = fusedLocationProviderClient.lastLocation
-/*        task.addOnSuccessListener { location ->
+        val task = fusedLocationProviderClient.lastLocation
+       task.addOnSuccessListener { location ->
             if(location != null){
                 currentLocation = location
-                *//*Toast.makeText(requireContext(),currentLocation.latitude.toString() + "" +
-                        currentLocation.longitude, Toast.LENGTH_SHORT).show()*//*
+                Toast.makeText(requireContext(),currentLocation.latitude.toString() + "" +
+                        currentLocation.longitude, Toast.LENGTH_SHORT).show()
 
                 val supportMapFragment = childFragmentManager.findFragmentById(R.id.myMap) as SupportMapFragment
                 supportMapFragment.getMapAsync(this)
             }
-        }*/
+        }
 
     }
 

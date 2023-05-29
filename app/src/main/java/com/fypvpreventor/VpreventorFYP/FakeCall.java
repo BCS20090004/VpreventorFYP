@@ -84,7 +84,7 @@ public class FakeCall extends AppCompatActivity {
                     }
                 },500);
                 s1 = "MS Tina";
-                s2 = "0108089521";
+                s2 = "01120066491";
 
               //  if(!s1.isEmpty() && !s2.isEmpty()){
                    //Intent i = new Intent(FakeCall.this,schedule.class);

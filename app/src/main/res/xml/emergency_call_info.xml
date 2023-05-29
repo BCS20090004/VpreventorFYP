@@ -5,7 +5,7 @@
     android:initialLayout="@layout/emergency_call"
     android:minWidth="40dp"
     android:minHeight="40dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/baseline_wifi_calling_3_24"
     android:previewLayout="@layout/emergency_call"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="1"

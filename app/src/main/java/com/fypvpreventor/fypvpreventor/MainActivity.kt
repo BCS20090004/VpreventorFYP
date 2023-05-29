@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.fypvpreventor.VpreventorFYP.databinding.ActivityMainBinding
+import com.fypvpreventor.VpreventorFYP.fragments.SensorFragment
 import com.fypvpreventor.fypvpreventor.viewmodels.RecordingController
 
 
@@ -41,5 +42,13 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+   override fun onBackPressed() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.childFragmentManager?.fragments?.get(0)
 
+        if (currentFragment is SensorFragment) {
+            moveTaskToBack(true) // Exit the app
+        } else {
+            super.onBackPressed() // Perform default back button behavior
+        }
+    }
 }

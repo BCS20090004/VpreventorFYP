@@ -325,11 +325,16 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         mediaPlayer.pause();
         playBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_button,null));
         isPlaying=false;
-        seekbarHandler.removeCallbacks(updateSeekbar);
+        Log.d("AudioPlayer", "Playback paused");
+        playerHeader.setText("Stopped");
+        if (seekbarHandler != null) {
+            seekbarHandler.removeCallbacks(updateSeekbar);
+        }
     }
 
     private void resumeAudio() {
         mediaPlayer.start();
+        playerHeader.setText("Playing");
         playBtn.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.pause_button));
         isPlaying = true;
         updateSeekbar = new Runnable() {
@@ -377,12 +382,14 @@ public class audiolist extends Fragment implements  AudioListAdapter.onItemListC
         playBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause_button,null));
         playerFilename.setText(filetoPlay.getName());
         playerHeader.setText("Playing");
+        Log.d("AudioPlayer", "Playback played");
 
         isPlaying=true;
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
+                Log.d("AudioPlayer", "Playback completed");
                 stopAudio();
                 playerHeader.setText("Finished");
             }

@@ -89,7 +89,7 @@ class RecordingController(private val activity: Activity, private val contactDao
             override fun run() {
                 stopRecording()
             }
-        }, 20000)
+        }, 200000)
     }
 
 

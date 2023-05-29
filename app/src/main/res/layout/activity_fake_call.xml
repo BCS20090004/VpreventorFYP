@@ -97,7 +97,7 @@
         android:layout_marginStart="29dp"
         android:hint="     Number"
         android:inputType="number"
-        android:text="Hp No. : 0108089521"
+        android:text="Hp No. : 01120066491"
         android:textAlignment="inherit"
         android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
