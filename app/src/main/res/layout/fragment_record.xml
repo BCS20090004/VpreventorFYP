@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lineHeight="32dp"
-        android:text="When shaked a 20 seconds audio is recorded immediately.\n The recorded file is saved in below file."
+        android:text="When shaked a 2 minutes audio is recorded immediately.\n The recorded file is saved in below file."
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="21sp"
